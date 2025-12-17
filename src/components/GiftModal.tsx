@@ -39,7 +39,7 @@ export default function GiftModal({ gift }: GiftModalProps) {
     setRedeemError(null)
 
     try {
-      const res = await axios.post(`http://localhost:5001/api/gifts/${gift.id}/redeem`)
+      const res = await axios.post(`/api/gifts/${gift.id}/redeem`)
       revealCode(res.data.code)
     } catch (err: any) {
       setRedeemError(err.response?.data?.error || 'Failed to redeem')

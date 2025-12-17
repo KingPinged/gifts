@@ -20,7 +20,7 @@ export default function GiftPage() {
 
     async function loadGift() {
       try {
-        const res = await axios.get(`http://localhost:5001/api/gifts/${id}`)
+        const res = await axios.get(`/api/gifts/${id}`)
         setGift(res.data)
       } catch (err: any) {
         setError(err.response?.data?.error || 'Gift not found')
