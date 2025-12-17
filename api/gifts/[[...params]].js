@@ -34,20 +34,30 @@ export default function handler(req, res) {
     return res.status(200).end()
   }
 
-  // Parse the path: /api/gifts/[id] or /api/gifts/[id]/redeem
-  const params = req.query.params || []
-  const id = params[0]
-  const action = params[1] // 'redeem' or undefined
+  // Parse path from URL: /api/gifts/[id] or /api/gifts/[id]/redeem
+  const url = req.url.split('?')[0] // Remove query string
+  const pathParts = url.replace('/api/gifts/', '').split('/').filter(Boolean)
+
+  const id = pathParts[0]
+  const action = pathParts[1] // 'redeem' or undefined
 
   if (!id) {
-    return res.status(400).json({ error: 'Gift ID required' })
+    return res.status(400).json({
+      error: 'Gift ID required',
+      debug: { url: req.url, pathParts }
+    })
   }
 
   const data = getGiftsData()
   const gift = data.gifts.find(g => g.id === id)
 
   if (!gift) {
-    return res.status(404).json({ error: 'Gift not found', code: 'NOT_FOUND' })
+    return res.status(404).json({
+      error: 'Gift not found',
+      code: 'NOT_FOUND',
+      searchedId: id,
+      availableIds: data.gifts.map(g => g.id)
+    })
   }
 
   // POST /api/gifts/:id/redeem
