@@ -1,0 +1,12 @@
+{
+  "gifts": [
+    {
+      "id": "example-gift-id",
+      "recipientName": "Friend",
+      "message": "Happy Holidays! Here's a special gift just for you!",
+      "code": "YOUR-GIFT-CODE-HERE",
+      "redeemed": false,
+      "createdAt": "2025-01-01T00:00:00.000Z"
+    }
+  ]
+}

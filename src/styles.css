@@ -1,0 +1,646 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: #0a0a0a;
+  color: #fff;
+  -webkit-font-smoothing: antialiased;
+}
+
+.loading-screen {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to bottom, #1a1a2e, #0a0a0a);
+}
+
+.loading-icon {
+  font-size: 4rem;
+  animation: float 2s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+.loading-text {
+  margin-top: 1.5rem;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem;
+  color: #fff;
+}
+
+.loading-dots {
+  display: flex;
+  gap: 0.25rem;
+  margin-top: 1rem;
+}
+
+.loading-dot {
+  width: 8px;
+  height: 8px;
+  background: #ffd700;
+  border-radius: 50%;
+  animation: bounce 1s ease-in-out infinite;
+}
+
+.loading-dot:nth-child(2) { animation-delay: 0.15s; }
+.loading-dot:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.error-screen, .not-found {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to bottom, #1a1a2e, #0a0a0a);
+  text-align: center;
+  padding: 2rem;
+}
+
+.error-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.error-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.error-message {
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 1.5rem;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-primary {
+  background: #ffd700;
+  color: #1a1a1a;
+}
+
+.btn-primary:hover {
+  background: #ffed4a;
+  transform: scale(1.05);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-secondary {
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+.btn-secondary:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+.gift-page {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.click-hint {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(255,255,255,0.7);
+  font-size: 0.875rem;
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.audio-control {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 30;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+}
+
+.audio-control:hover {
+  background: rgba(255,255,255,0.2);
+  transform: scale(1.1);
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(8px);
+  z-index: 40;
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* ===== ENVELOPE STYLES ===== */
+.envelope-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 50;
+  perspective: 1000px;
+}
+
+.envelope-container.dropping {
+  animation: dropIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes dropIn {
+  0% {
+    transform: translate(-50%, -150vh) rotate(-10deg);
+    opacity: 0;
+  }
+  60% {
+    transform: translate(-50%, -45%) rotate(3deg);
+    opacity: 1;
+  }
+  80% {
+    transform: translate(-50%, -52%) rotate(-2deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.envelope {
+  position: relative;
+  width: 340px;
+  height: 200px;
+}
+
+/* Envelope body */
+.envelope-body {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(145deg, #f5e6d3 0%, #e8d4be 50%, #d4c4a8 100%);
+  border-radius: 4px;
+  box-shadow:
+    0 4px 20px rgba(0,0,0,0.3),
+    inset 0 -2px 10px rgba(0,0,0,0.05),
+    inset 0 2px 10px rgba(255,255,255,0.5);
+  z-index: 2;
+  overflow: hidden;
+}
+
+/* Envelope texture */
+.envelope-body::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 2px,
+      rgba(139,119,101,0.03) 2px,
+      rgba(139,119,101,0.03) 4px
+    );
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+/* Inner V fold decoration on envelope body */
+.envelope-body::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 170px solid transparent;
+  border-right: 170px solid transparent;
+  border-top: 100px solid rgba(0,0,0,0.03);
+}
+
+/* Envelope flap */
+.envelope-flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  transform-origin: center top;
+  transform-style: preserve-3d;
+  z-index: 3;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.envelope-container.opening .envelope-flap,
+.envelope-container.opened .envelope-flap {
+  transform: rotateX(-180deg);
+  z-index: 1;
+}
+
+.envelope-flap-inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-left: 170px solid transparent;
+  border-right: 170px solid transparent;
+  border-top: 100px solid #e8d4be;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+
+/* Back side of flap (visible when opened) */
+.envelope-flap-inner::after {
+  content: '';
+  position: absolute;
+  top: -100px;
+  left: -170px;
+  width: 0;
+  height: 0;
+  border-left: 170px solid transparent;
+  border-right: 170px solid transparent;
+  border-top: 100px solid #c4b498;
+  transform: rotateY(180deg);
+}
+
+/* Stamp */
+.stamp {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 60px;
+  height: 72px;
+  background: #fff;
+  border: 2px dashed #cc9966;
+  padding: 4px;
+  transform: rotate(3deg);
+  box-shadow: 1px 2px 4px rgba(0,0,0,0.2);
+}
+
+.stamp-inner {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #8b0000 0%, #a52a2a 50%, #8b0000 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  text-align: center;
+}
+
+.stamp-icon {
+  font-size: 1.5rem;
+  margin-bottom: 2px;
+}
+
+.stamp-text {
+  font-family: 'Georgia', serif;
+  font-size: 0.5rem;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+/* Letter */
+.letter {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%) translateY(100%);
+  width: 60vw;
+  max-width: 600px;
+  min-width: 320px;
+  min-height: 50vh;
+  background: linear-gradient(to bottom, #fffef9 0%, #f9f5eb 100%);
+  border-radius: 3px 3px 0 0;
+  box-shadow: 0 -4px 30px rgba(0,0,0,0.25);
+  z-index: 60;
+  opacity: 0;
+  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.4s, opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.4s;
+}
+
+.letter.letter-visible {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+/* Letter paper texture */
+.letter::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 27px,
+      rgba(200,200,220,0.3) 27px,
+      rgba(200,200,220,0.3) 28px
+    );
+  pointer-events: none;
+  border-radius: 2px;
+}
+
+/* Red margin line like notebook paper */
+.letter::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 30px;
+  width: 1px;
+  height: 100%;
+  background: rgba(220,100,100,0.3);
+}
+
+.letter-content {
+  padding: 32px 36px 32px 50px;
+  position: relative;
+  min-height: min(55vh, 450px);
+  display: flex;
+  flex-direction: column;
+}
+
+.letter-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.letter-decoration {
+  color: #8b4513;
+  font-size: 1.25rem;
+  letter-spacing: 12px;
+  opacity: 0.6;
+}
+
+.letter-greeting {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: 1.75rem;
+  font-weight: normal;
+  font-style: italic;
+  color: #2c1810;
+  margin-bottom: 24px;
+}
+
+.letter-message {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: 1.25rem;
+  line-height: 2;
+  color: #3d2817;
+  white-space: pre-wrap;
+  margin-bottom: 28px;
+  flex-grow: 1;
+}
+
+.letter-signature {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-style: italic;
+  color: #4a3728;
+  font-size: 1.25rem;
+  margin-bottom: 28px;
+}
+
+.letter-heart {
+  color: #c41e3a;
+  font-size: 1.4rem;
+}
+
+.letter-divider {
+  width: 60%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #8b7355, transparent);
+  margin: 0 auto 28px;
+}
+
+.letter-error {
+  background: rgba(220,38,38,0.1);
+  border: 1px solid rgba(220,38,38,0.3);
+  border-radius: 6px;
+  padding: 10px;
+  color: #991b1b;
+  font-size: 0.875rem;
+  text-align: center;
+  margin-bottom: 16px;
+  font-family: 'Georgia', serif;
+}
+
+/* Code section on letter */
+.code-section {
+  text-align: center;
+}
+
+.code-label {
+  font-family: 'Georgia', serif;
+  color: #5d4e37;
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+}
+
+.code-display {
+  font-family: 'Courier New', monospace;
+  font-size: 1.2rem;
+  background: #f0ebe0;
+  padding: 16px 20px;
+  border-radius: 6px;
+  border: 1px solid #d4c4a8;
+  color: #8b4513;
+  letter-spacing: 0.15em;
+  user-select: all;
+  margin-bottom: 16px;
+}
+
+.btn-copy {
+  background: #8b4513;
+  color: #fff;
+  border: none;
+  padding: 14px 32px;
+  border-radius: 6px;
+  font-family: 'Georgia', serif;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  width: 100%;
+}
+
+.btn-copy:hover {
+  background: #a0522d;
+}
+
+.btn-copy.copied {
+  background: #2d5a27;
+}
+
+.code-hint {
+  font-family: 'Georgia', serif;
+  color: #8b7355;
+  font-size: 0.9rem;
+  margin-top: 16px;
+  font-style: italic;
+}
+
+.btn-redeem {
+  width: 100%;
+  background: linear-gradient(135deg, #8b4513 0%, #a0522d 100%);
+  color: #fff;
+  border: none;
+  padding: 18px 32px;
+  border-radius: 6px;
+  font-family: 'Georgia', serif;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 3px 12px rgba(139,69,19,0.3);
+}
+
+.btn-redeem:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(139,69,19,0.4);
+}
+
+.btn-redeem:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* Mobile responsiveness for envelope */
+@media (max-width: 500px) {
+  .letter {
+    width: 95vw;
+    min-width: unset;
+  }
+
+  .letter-content {
+    padding: 24px 20px 24px 36px;
+  }
+
+  .letter-greeting {
+    font-size: 1.4rem;
+    margin-bottom: 20px;
+  }
+
+  .letter-message {
+    font-size: 1.1rem;
+    line-height: 1.8;
+  }
+
+  .letter-signature {
+    font-size: 1.1rem;
+  }
+
+  .letter-decoration {
+    font-size: 1rem;
+    letter-spacing: 8px;
+  }
+
+  .btn-redeem {
+    padding: 16px 28px;
+    font-size: 1.1rem;
+  }
+
+  .code-display {
+    font-size: 1rem;
+    padding: 14px 16px;
+  }
+}
+
+@media (max-width: 380px) {
+  .envelope {
+    width: 300px;
+  }
+
+  .envelope-body::after {
+    border-left: 150px solid transparent;
+    border-right: 150px solid transparent;
+  }
+
+  .envelope-flap-inner {
+    border-left: 150px solid transparent;
+    border-right: 150px solid transparent;
+  }
+
+  .envelope-flap-inner::after {
+    left: -150px;
+    border-left: 150px solid transparent;
+    border-right: 150px solid transparent;
+  }
+
+  .stamp {
+    width: 50px;
+    height: 60px;
+  }
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

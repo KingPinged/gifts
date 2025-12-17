@@ -1,0 +1,11 @@
+Model Information:
+* title:	Small winter scene
+* source:	https://sketchfab.com/3d-models/small-winter-scene-4596d5fb12124d949984ead1d53ef6eb
+* author:	danatomashevych (https://sketchfab.com/danatomashevych)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Small winter scene" (https://sketchfab.com/3d-models/small-winter-scene-4596d5fb12124d949984ead1d53ef6eb) by danatomashevych (https://sketchfab.com/danatomashevych) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

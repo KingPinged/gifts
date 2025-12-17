@@ -1,0 +1,8 @@
+Model Information:
+* title:	Giftbox
+* source:	https://sketchfab.com/3d-models/giftbox-a16c81db41204ae1a996dedc692b29fd
+* author:	minimoku (https://sketchfab.com/minimoku)
+
+Model License:
+* license type:	SKETCHFAB Standard (https://sketchfab.com/licenses)
+* requirements:	Under basic restrictions, use worldwide, on all types of media, commercially or not, and in all types of derivative works
