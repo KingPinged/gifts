@@ -1,8 +1,7 @@
-// Vercel Serverless Function: POST /api/gifts/:id/redeem
+// Vercel Serverless Function: Catch-all for /api/gifts/*
 
 function getGiftsData() {
   if (!process.env.GIFTS_DATA) {
-    // Return demo data if env var not set
     return {
       gifts: [
         {
@@ -28,18 +27,22 @@ function getGiftsData() {
 export default function handler(req, res) {
   // Set CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*')
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS')
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
 
   if (req.method === 'OPTIONS') {
     return res.status(200).end()
   }
 
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' })
+  // Parse the path: /api/gifts/[id] or /api/gifts/[id]/redeem
+  const params = req.query.params || []
+  const id = params[0]
+  const action = params[1] // 'redeem' or undefined
+
+  if (!id) {
+    return res.status(400).json({ error: 'Gift ID required' })
   }
 
-  const { id } = req.query
   const data = getGiftsData()
   const gift = data.gifts.find(g => g.id === id)
 
@@ -47,9 +50,21 @@ export default function handler(req, res) {
     return res.status(404).json({ error: 'Gift not found', code: 'NOT_FOUND' })
   }
 
-  // Note: In serverless, we can't persist state changes without a database
-  // The gift code is returned regardless, and redeemed state is tracked via GIFTS_DATA env var
-  // For true persistence, you'd need to use a database (Vercel KV, Supabase, etc.)
+  // POST /api/gifts/:id/redeem
+  if (action === 'redeem' && req.method === 'POST') {
+    return res.status(200).json({ code: gift.code })
+  }
 
-  res.status(200).json({ code: gift.code })
+  // GET /api/gifts/:id
+  if (req.method === 'GET' && !action) {
+    return res.status(200).json({
+      id: gift.id,
+      recipientName: gift.recipientName,
+      message: gift.message,
+      isRedeemed: gift.redeemed,
+      code: gift.redeemed ? gift.code : undefined
+    })
+  }
+
+  return res.status(405).json({ error: 'Method not allowed' })
 }
