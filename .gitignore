@@ -25,6 +25,7 @@ server/gifts.json
 # OS files
 .DS_Store
 Thumbs.db
+nul
 
 # Logs
 *.log
