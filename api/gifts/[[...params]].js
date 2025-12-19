@@ -34,17 +34,27 @@ export default function handler(req, res) {
     return res.status(200).end()
   }
 
-  // Parse params from Vercel's catch-all route: [[...params]]
-  // req.query.params is an array like ['gift-id'] or ['gift-id', 'redeem']
-  const params = req.query.params || []
+  // Parse params - try multiple methods for Vercel compatibility
+  let id, action
 
-  const id = params[0]
-  const action = params[1] // 'redeem' or undefined
+  // Method 1: Try req.query.params (Vercel catch-all)
+  if (req.query.params && req.query.params.length > 0) {
+    id = req.query.params[0]
+    action = req.query.params[1]
+  } else {
+    // Method 2: Parse from URL path directly
+    const urlPath = req.url.split('?')[0] // Remove query string
+    const pathMatch = urlPath.match(/\/api\/gifts\/([^/]+)\/?(.*)/)
+    if (pathMatch) {
+      id = pathMatch[1]
+      action = pathMatch[2] || undefined
+    }
+  }
 
   if (!id) {
     return res.status(400).json({
       error: 'Gift ID required',
-      debug: { params, url: req.url }
+      debug: { query: req.query, url: req.url }
     })
   }
 
