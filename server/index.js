@@ -5,7 +5,7 @@ const fs = require('fs')
 const path = require('path')
 
 const app = express()
-const PORT = process.env.PORT || 5001
+const PORT = process.env.PORT || 5123
 
 // Data storage mode: 'env' for production (Railway), 'file' for local dev
 const USE_ENV = !!process.env.GIFTS_DATA

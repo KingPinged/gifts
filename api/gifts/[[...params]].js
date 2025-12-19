@@ -34,17 +34,17 @@ export default function handler(req, res) {
     return res.status(200).end()
   }
 
-  // Parse path from URL: /api/gifts/[id] or /api/gifts/[id]/redeem
-  const url = req.url.split('?')[0] // Remove query string
-  const pathParts = url.replace('/api/gifts/', '').split('/').filter(Boolean)
+  // Parse params from Vercel's catch-all route: [[...params]]
+  // req.query.params is an array like ['gift-id'] or ['gift-id', 'redeem']
+  const params = req.query.params || []
 
-  const id = pathParts[0]
-  const action = pathParts[1] // 'redeem' or undefined
+  const id = params[0]
+  const action = params[1] // 'redeem' or undefined
 
   if (!id) {
     return res.status(400).json({
       error: 'Gift ID required',
-      debug: { url: req.url, pathParts }
+      debug: { params, url: req.url }
     })
   }
 
